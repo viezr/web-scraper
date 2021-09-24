@@ -4,24 +4,29 @@ Module for scrapping news from site e-katalog.ru
 '''
 from bs4 import BeautifulSoup
 from utils.date_parser import convert_date
+from modules.base_module import Scraper
 
 
-def logic(content):
-    '''
-    Return list of news [{date: date object, title: string, link: string}, ... ]
-    '''
-    soup = BeautifulSoup(content, "html.parser")
-    main_block = soup.find("td", {"class": "main-part-content"})
+class Ekatalog_items(Scraper):
+    def __init__(self, path):
+        self.host = "https://www.e-katalog.ru"
+        self.path = path
 
-    title = main_block.find("h1", {"itemprop": "name"}).text.strip()
-    price = main_block.find("span", {"itemprop": "lowPrice"})["content"]
-    link = main_block.find("div", {"id": "item-bookmarks"}).a.next_sibling["href"]
+    def parse(self, content):
+        '''
+        Return list of news [{date: date object, title: string, link: string}, ... ]
+        '''
+        soup = BeautifulSoup(content, "html.parser")
+        main_block = soup.find("td", {"class": "main-part-content"})
 
-    item_list = [{
-        "date": convert_date("today"),
-        "title": f"{title} - {price} rub.",
-        "link": "https://www.e-katalog.ru" + link
-    }]
+        title = main_block.find("h1", {"itemprop": "name"}).text.strip()
+        price = main_block.find("span", {"itemprop": "lowPrice"})["content"]
+        link = main_block.find("div", {"id": "item-bookmarks"}).a.next_sibling["href"]
 
-    return item_list
+        item_list = [{
+            "date": convert_date("today"),
+            "title": f"{title} - {price} rub.",
+            "link": self.host + link
+        }]
 
+        return item_list

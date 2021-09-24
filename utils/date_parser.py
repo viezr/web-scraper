@@ -29,6 +29,8 @@ def convert_date(date):
     '''
     Convert string with date to datetime object
     '''
+    if date == None:
+        return dt.date.today()
     date = date.lower()
     if "сегод" in date or "today" in date:
         return dt.date.today()
@@ -40,13 +42,17 @@ def convert_date(date):
     else:
         date = date.split()
 
+    if len(date) == 1:
+        return dt.date.today()
+
     if len(date) == 2:
         if len(date[0]) < 3:
             if convert_text_month(date[1]):
                 date.append(str(dt.date.today().year))
         elif len(date[1]) < 3:
-            if convert_text_month(date[0]):
-                date = [ str(dt.date.today().year), date[0], date[1] ]
+            month = convert_text_month(date[0])
+            if month:
+                date = [ str(dt.date.today().year), month, date[1] ]
         else:
             date = "date err"
             return date

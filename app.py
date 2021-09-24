@@ -6,8 +6,8 @@ App for requesting data from sites and generate html with filtered data.
 - remove dublicates of data per domain, and dublicates of domains
 - generate simple html of data (full or filtered by keywords)
 - may be extended by adding new modules with logic for specific sites
-Search keywords and sites for scrapping stored in config.py.
-App will try to convert many date formats to date object or return today.
+Search keywords and sites for scraping stored in config.py.
+App will try to convert many date formats to date object, or return today.
 Using simple data format: [date:date_object, title:str]
 '''
 from modules import Ria_news

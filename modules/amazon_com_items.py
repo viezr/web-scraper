@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Module for scrapping prices from site amazon.com "Best sellers"
+Module for scraping prices from site amazon.com "Best sellers"
 https://www.amazon.com/gp/bestsellers/electronics/7072561011
 '''
 from bs4 import BeautifulSoup

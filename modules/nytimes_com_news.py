@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Module for scrapping prices from site news.google.com
+Module for scraping prices from site news.google.com
 '''
 from bs4 import BeautifulSoup
 from utils.date_parser import convert_date

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Module for scrapping news from site etfunds.ru
+Module for scraping news from site etfunds.ru
 '''
 from bs4 import BeautifulSoup
 from utils.date_parser import convert_date

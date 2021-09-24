@@ -2,14 +2,14 @@
 # If file not exist, it will request data from site
 load_from_file = True
 
-# cache folder will be created if not exist
+# Cache folder will be created if not exist
 cache_folder = "cache/"
 
 # Keywords to filter output data
 keywords = [ "кита", "кнр", "fxus", "galaxy s21", "iphone 12",
              "pixel 4", "etf", "u.s." ]
 
-# Sites for scrapping. Name and type used to choice logic
+# Sites for scraping. Name and type used for logic select
 sites = [
     { "name": "nytimes.com", "type": "news",
         "path": "/section/world" },

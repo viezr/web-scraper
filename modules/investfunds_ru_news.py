@@ -18,7 +18,11 @@ class Investfunds_news(Scraper):
         '''
         soup = BeautifulSoup(content, "html.parser")
         news = soup.find("ul", {"class": "news_list"})
-        news = news.find_all("li")
+        if news:
+            news = news.find_all("li")
+        if not news:
+            print("  ERROR. Parsing fail, no blocks found")
+            return []
 
         news_list = []
         item_count = 0

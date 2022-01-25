@@ -16,16 +16,6 @@ class Etfunds_news(Scraper):
         '''
         Return list of news [{date: date object, title: string, link: string}, ... ]
         '''
-        soup = BeautifulSoup(content, "html.parser")
-        news = soup.find("div", {"class": "pt-cv-timeline"})
-        news = news.find("div", {"class": "tl-items"})
-        news = news.find_all("div", {"class": "pt-cv-content-item"})
-
-        news2 = soup.find("div", {"class": "el-content uk-panel uk-margin-top"})
-        news2 = news2.find_all("div", {"class": "tl-item-content"})
-
-        news_list = []
-        item_count = 0
         def parse_block(news):
             nonlocal item_count
             for child in news:
@@ -38,8 +28,23 @@ class Etfunds_news(Scraper):
                     news_list[item_count]["date"] = convert_date(date)
                     item_count += 1
 
-        parse_block(news)
-        parse_block(news2)
+        news_list = []
+        item_count = 0
 
+        soup = BeautifulSoup(content, "html.parser")
+        news = soup.find("div", {"class": "pt-cv-timeline"})
+        if news:
+            news = news.find("div", {"class": "tl-items"})
+        if news:
+            news = news.find_all("div", {"class": "pt-cv-content-item"})
+            parse_block(news)
+
+        news2 = soup.find("div", {"class": "el-content uk-panel uk-margin-top"})
+        if news2:
+            news2 = news2.find_all("div", {"class": "tl-item-content"})
+            parse_block(news2)
+
+        if not news and not news2:
+            print("  ERROR. Parsing fail, no blocks found")
 
         return news_list

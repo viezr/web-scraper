@@ -18,6 +18,9 @@ class Ekatalog_items(Scraper):
         '''
         soup = BeautifulSoup(content, "html.parser")
         main_block = soup.find("td", {"class": "main-part-content"})
+        if not main_block:
+            print("  ERROR. Parsing fail, no blocks found")
+            return []
 
         title = main_block.find("h1", {"itemprop": "name"}).text.strip()
         price = main_block.find("span", {"itemprop": "lowPrice"})["content"]

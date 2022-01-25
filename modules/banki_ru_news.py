@@ -18,6 +18,9 @@ class Banki_news(Scraper):
         '''
         soup = BeautifulSoup(content, "html.parser")
         news = soup.find("div", {"data-test": "news-lenta-list"})
+        if not news:
+            print("  ERROR. Parsing fail, no blocks found")
+            return []
 
         news_list = []
         item_count = 0

@@ -54,17 +54,16 @@ def convert_date(date):
             if month:
                 date = [ str(dt.date.today().year), month, date[1] ]
         else:
-            date = "date err"
-            return date
+            return dt.date.today()
 
     if len(date[2]) == 4:
         try:
             date = dt.date(int(date[2]), convert_text_month(date[1]), int(date[0]))
         except:
-            date = "date err"
+            date = dt.date.today()
     else:
         try:
             date = dt.date(int(date[0]), convert_text_month(date[1]), int(date[2]))
         except:
-            date = "date err"
+            date = dt.date.today()
     return date

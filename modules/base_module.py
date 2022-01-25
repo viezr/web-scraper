@@ -3,7 +3,7 @@
 Base module for scraping sites
 '''
 import os
-import requests
+from urllib import request
 from re import sub
 from modules.useragents import ua
 from random import randrange
@@ -14,44 +14,46 @@ class Scraper:
     '''
     Base class for scraping sites
     '''
-    def scraper(self):
+    def scraper(self) -> [str, None]:
         '''
         Scraper method. Return list of scraped data
         '''
-        request_url = f"{self.host}{self.path}"
+        url = f"{self.host}{self.path}"
         site_name = sub("(http)s?:\/\/(www)?[.]?","", self.host)
         fname = sub("\W","_", site_name + self.path).lower()
         file = f"{cache_folder}{fname}.html"
-        print("Parsing", request_url, "...")
+        print("Parsing", url, "...")
 
-        def request_save():
-            '''
-            Request site and save to cache dir. Return site content
-            '''
-            hdr = { "User-Agent" : ua[randrange(len(ua))] }
-            print(hdr)
-            try:
-                content = requests.get(request_url, headers=hdr, timeout=7).text
-            except:
-                raise ConnectionError
-            if not os.path.exists(cache_folder):
-                os.makedirs(cache_folder)
-            f = open( file, mode="w" )
-            f.write(content)
-            f.close()
-            return content
-
-        if load_from_file:
-            # For debug. Load content from file instead of request each time.
-            if os.path.isfile(file):
-                f = open( file, mode="r" )
+        content = None
+        # For debug. Load content from file instead of request each time.
+        if load_from_file and os.path.isfile(file):
+            with open( file, mode="r" ) as f:
                 content = f.read()
-                f.close()
-            else:
-                content = request_save()
         else:
-                content = request_save()
+            content = self._request_save(url, file)
 
-        data_list = self.parse(content)
+        if content:
+            data_list = self.parse(content)
+            return {"site": site_name, "data": data_list}
+        print("  ERROR. No content.")
+        return None
 
-        return { "site": site_name, "data": data_list }
+    def _request_save(self, url, file) -> [str, None]:
+        '''
+        Request site and save to cache dir. Return site content
+        '''
+        content = None
+        headers = {"User-Agent" : ua[randrange(len(ua))]}
+        req = request.Request(url, headers=headers)
+        try:
+            with request.urlopen(req) as f:
+                content = f.read().decode("utf-8")
+        except:
+            print("  ERROR. ConnectionError.")
+        if not os.path.exists(cache_folder):
+            os.makedirs(cache_folder)
+        if content:
+            with open(file, mode="w") as fd:
+                fd.write(content)
+        return content
+

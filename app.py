@@ -43,7 +43,9 @@ if __name__ == "__main__":
     for site in sites:
         sname, stype, spath = site.values()
         sc = logic_classes[sname][stype](spath)
-        data_list.append(sc.scraper() )
+        data = sc.scraper()
+        if data:
+            data_list.append(data)
 
     #Filter data by keywords (may be omited for only remove dublicates), remove dublicates
     data_list = filter_data(data_list, keywords)

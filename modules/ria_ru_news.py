@@ -18,7 +18,11 @@ class Ria_news(Scraper):
         '''
         soup = BeautifulSoup(content, "html.parser")
         news = soup.find("div", {"class": "list-tags"})
-        news = news.find_all("div", {"class": "list-item"})
+        if news:
+            news = news.find_all("div", {"class": "list-item"})
+        if not news:
+            print("  ERROR. Parsing fail, no blocks found")
+            return []
 
         news_list = []
         item_count = 0
